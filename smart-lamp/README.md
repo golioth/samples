@@ -30,7 +30,7 @@ Them, you need to have NodeJS installed and run the following commands:
 
 ```
 npm install
-npm run
+npm start
 ```
 
 That will install all project dependencies and run the local web server on port 3000.
