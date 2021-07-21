@@ -1,0 +1,9 @@
+sample:
+  description: Access Golioth Light DB to control LEDs over IPSP
+  name: lightdb-led-ipsp
+common:
+  harness: net
+  platform_allow: nrf52840dk_nrf52840
+  tags: golioth net socket
+tests:
+  sample.golioth.lightdb_led_ipsp: {}
