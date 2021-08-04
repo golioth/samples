@@ -96,20 +96,26 @@ static int apply_double(CborValue *value, void *data)
 	return 0;
 }
 
-#define CONFIG_VALUE(_name, _member, _apply)				\
+#define APPLY(_type, _member)					\
+	_Generic((((_type) {})._member),			\
+		 bool: apply_boolean,				\
+		 int: apply_int,				\
+		 double: apply_double)
+
+#define CONFIG_VALUE(_name, _member)					\
 	{								\
 		.name = _name,						\
 		.value_offset = offsetof(struct cloud_data_cfg, _member), \
-		.apply = _apply,					\
+		.apply = APPLY(struct cloud_data_cfg, _member),		\
 	}
 
 static const struct config_value config_values[] = {
-	CONFIG_VALUE(CONFIG_GPS_TIMEOUT, gps_timeout, apply_int),
-	CONFIG_VALUE(CONFIG_DEVICE_MODE, active_mode, apply_boolean),
-	CONFIG_VALUE(CONFIG_ACTIVE_TIMEOUT, active_wait_timeout, apply_int),
-	CONFIG_VALUE(CONFIG_MOVE_RES, movement_resolution, apply_int),
-	CONFIG_VALUE(CONFIG_MOVE_TIMEOUT, movement_timeout, apply_int),
-	CONFIG_VALUE(CONFIG_ACC_THRESHOLD, accelerometer_threshold, apply_double),
+	CONFIG_VALUE(CONFIG_GPS_TIMEOUT, gps_timeout),
+	CONFIG_VALUE(CONFIG_DEVICE_MODE, active_mode),
+	CONFIG_VALUE(CONFIG_ACTIVE_TIMEOUT, active_wait_timeout),
+	CONFIG_VALUE(CONFIG_MOVE_RES, movement_resolution),
+	CONFIG_VALUE(CONFIG_MOVE_TIMEOUT, movement_timeout),
+	CONFIG_VALUE(CONFIG_ACC_THRESHOLD, accelerometer_threshold),
 };
 
 static int config_cbor_field_apply(CborValue *value, struct cloud_data_cfg *data)
