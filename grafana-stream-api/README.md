@@ -32,7 +32,7 @@ Them on Grafana UI, go to `Configuration` > `Data Sources` > `Add data source`. 
 
 ![Search Data Source](./images/search-ds.png)
 
-Fill in the URL with `https://api.golioth.dev/v1/projects/{your-project-id}` and add a `Custom HTTP Header` named `X-API-Key` and fill in the value with your API Key.
+Fill in the URL with `https://api.golioth.io/v1/projects/{your-project-id}` and add a `Custom HTTP Header` named `X-API-Key` and fill in the value with your API Key.
 
 Now we can start querying our data using Golioth APIs. Open Grafana's explore tab, select your newly created JSON API Data Source and follow the steps bellow to show Light DB Stream data.
 

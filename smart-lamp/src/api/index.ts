@@ -6,7 +6,7 @@ import {
 const API_KEY = "YOUR_API_KEY"
 const PROJECT_ID = "YOUR_PROJECT_ID"
 
-const BASE_URL = "https://api.golioth.dev/v1"
+const BASE_URL = "https://api.golioth.io/v1"
 
 interface Device {
   id: string;

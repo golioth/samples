@@ -1,12 +1,11 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import { IonList, IonItem, IonLabel, IonInput, IonToggle, IonRadio, IonCheckbox, IonItemSliding, IonItemOption, IonItemOptions } from '@ionic/react';
+import { IonList, IonItem, IonLabel } from '@ionic/react';
 
-import ExploreContainer from '../components/ExploreContainer';
 import { useDeviceList } from '../api'
 import './Home.css';
 
 const Home: React.FC = () => {
-  const { devices, loading } = useDeviceList()
+  const { devices } = useDeviceList()
   return (
     <IonPage>
       <IonHeader>
