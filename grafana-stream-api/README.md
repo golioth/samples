@@ -67,7 +67,7 @@ $.list[*].press
 		],
 		"timeBucket" : "1h",
 		"filters" : [
-			{ "path": "env", "op" : "<>", "value" : null },
+			{ "path": "env", "op" : "<>", "value" : null }
 		]
 	}
 }
