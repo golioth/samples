@@ -1,0 +1,10 @@
+sample:
+  name: BH1750 Sensor Sample
+tests:
+  samples.sensor.bh1750:
+    harness: sensor
+    tags: sensors
+    platform_allow: nrf9160dk_nrf9160
+    integration_platforms:
+      - nrf9160dk_nrf9160
+    depends_on: i2c

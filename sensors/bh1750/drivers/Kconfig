@@ -1,0 +1,5 @@
+config BH1750
+	bool "BH1750 Sensor"
+	depends on I2C
+	help
+	  Enable driver for BH1750 sensors.
