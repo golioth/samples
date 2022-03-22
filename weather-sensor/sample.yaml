@@ -1,0 +1,9 @@
+sample:
+  description: Stream temperature, humidity, and pressure data to LightDB stream
+  name: golioth-bme280
+common:
+  harness: net
+  platform_allow: >
+    circuitdojo_feather_nrf9160_ns
+    esp32
+  tags: golioth lightdb net socket
