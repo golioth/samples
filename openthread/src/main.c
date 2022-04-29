@@ -1,4 +1,4 @@
-// #include <dk_buttons_and_leds.h>
+#include <dk_buttons_and_leds.h>
 #include <logging/log.h>
 
 #include <drivers/uart.h>
@@ -11,6 +11,7 @@
 #include <net/openthread.h>
 #include <openthread/thread.h>
 
+#include <logging/log_ctrl.h>
 #include <sys/reboot.h>
 
 #include "flash.h"
@@ -20,7 +21,7 @@
 LOG_MODULE_REGISTER(main, CONFIG_GOLIOTH_THREAD_LOG_LEVEL);
 
 #define CONSOLE_LABEL DT_LABEL(DT_CHOSEN(zephyr_console))
-#define OT_CONNECTION_LED 0//DK_LED1
+#define OT_CONNECTION_LED 0
 
 static struct k_work on_connect_work;
 static struct k_work on_disconnect_work;
@@ -91,7 +92,7 @@ static int data_received(struct golioth_blockwise_download_ctx *ctx,
 		LOG_INF("Rebooting in %d second(s)", REBOOT_DELAY_SEC);
 
 		/* Synchronize logs */
-		//LOG_PANIC();
+		LOG_PANIC();
 
 		k_sleep(K_SECONDS(REBOOT_DELAY_SEC));
 
@@ -217,16 +218,15 @@ static void golioth_on_message(struct golioth_client *client,
 	type = coap_header_get_type(rx);
 	payload = coap_packet_get_payload(rx, &payload_len);
 
-	if (!IS_ENABLED(CONFIG_LOG_BACKEND_GOLIOTH) && payload) {
-		LOG_HEXDUMP_DBG(payload, payload_len, "Payload");
-	}
+	(void)coap_response_received(rx, NULL, coap_replies,
+				     ARRAY_SIZE(coap_replies));
 }
 
 static void on_ot_connect(struct k_work *item)
 {
 	ARG_UNUSED(item);
 
-	//dk_set_led_on(OT_CONNECTION_LED);
+	dk_set_led_on(OT_CONNECTION_LED);
 
 	client->on_connect = golioth_on_connect;
 	client->on_message = golioth_on_message;
@@ -237,7 +237,7 @@ static void on_ot_disconnect(struct k_work *item)
 {
 	ARG_UNUSED(item);
 
-	//dk_set_led_off(OT_CONNECTION_LED);
+	dk_set_led_off(OT_CONNECTION_LED);
 }
 
 
@@ -247,9 +247,9 @@ static void on_button_changed(uint32_t button_state, uint32_t has_changed)
 
 	LOG_DBG("Button %d %d", button_state, has_changed);
 
-	// if ((buttons & DK_BTN1_MSK) && button_state == 1) {
-	// 	golioth_send_hello(client);
-	// }
+	if ((buttons & DK_BTN1_MSK) && button_state == 1) {
+		golioth_send_hello(client);
+	}
 }
 
 static void on_thread_state_changed(uint32_t flags, void *context)
@@ -314,17 +314,32 @@ void main(void)
 
 	LOG_INF("Start Golioth Thread sample");
 
-	// ret = dk_buttons_init(on_button_changed);
-	// if (ret) {
-	// 	LOG_ERR("Cannot init buttons (error: %d)", ret);
-	// 	return;
-	// }
+	if (!boot_is_img_confirmed()) {
+		/*
+		 * There is no shared context between previous update request
+		 * and current boot, so treat current image 'confirmed' flag as
+		 * an indication whether previous update process was successful
+		 * or not.
+		 */
+		dfu_initial_result = GOLIOTH_DFU_RESULT_FIRMWARE_UPDATED_SUCCESSFULLY;
 
-	// ret = dk_leds_init();
-	// if (ret) {
-	// 	LOG_ERR("Cannot init leds, (error: %d)", ret);
-	// 	return;
-	// }
+		ret = boot_write_img_confirmed();
+		if (ret) {
+			LOG_ERR("Failed to confirm image: %d", ret);
+		}
+	}
+
+	ret = dk_buttons_init(on_button_changed);
+	if (ret) {
+		LOG_ERR("Cannot init buttons (error: %d)", ret);
+		return;
+	}
+
+	ret = dk_leds_init();
+	if (ret) {
+		LOG_ERR("Cannot init leds, (error: %d)", ret);
+		return;
+	}
 
 	k_work_init(&on_connect_work, on_ot_connect);
 	k_work_init(&on_disconnect_work, on_ot_disconnect);
