@@ -25,6 +25,23 @@ Requirements
 
 - Golioth credentials
 - Network connectivity
+- Golioth Zephyr SDK v0.1.0
+
+To checkout SDK v0.1.0 for vanilla Zephyr:
+
+```
+cd ~/golioth-zephyr-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
+
+Similarly, to checkout SDK v0.1.0 for NCS Zephyr:
+
+```
+cd ~/golioth-ncs-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
 
 Building and Running
 ********************
@@ -96,6 +113,12 @@ This is the output from the serial console:
    [00:04:40.939,880] <inf> golioth_bme380: temp: 27.750000; press: 98.283949; humidity: 30.223632
    [00:04:45.941,589] <inf> golioth_bme380: temp: 27.750000; press: 98.283781; humidity: 30.223632
    [00:04:50.943,267] <inf> golioth_bme380: temp: 27.750000; press: 98.283558; humidity: 30.223632
+
+TODO
+****
+- Add mcumgr support to this repo, since it is no longer supported in the Golioth
+  Zephyr SDK after v0.1.0. That would allow this sample to stay up to date with the SDK,
+  and not be stuck on v0.1.0.
 
 .. _Datacake/Golioth integration: https://docs.golioth.io/cloud/output-streams/datacake
 .. _Datacake guide: https://docs.datacake.de/integrations/golioth
