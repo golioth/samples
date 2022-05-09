@@ -13,6 +13,23 @@ Requirements
 
 - Golioth credentials
 - Network connectivity
+- Golioth Zephyr SDK v0.1.0
+
+To checkout SDK v0.1.0 for vanilla Zephyr:
+
+```
+cd ~/golioth-zephyr-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
+
+Similarly, to checkout SDK v0.1.0 for NCS Zephyr:
+
+```
+cd ~/golioth-ncs-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
 
 Building and Running
 ********************
@@ -145,6 +162,12 @@ This is the output from the serial console of nRF52840 DK + ESP32-WROOM-32:
    [00:00:06.547,180] <inf> golioth_system: Client connected!
    [00:00:10.561,370] <inf> golioth_hello: Sending hello! 1
    [00:00:15.565,368] <inf> golioth_hello: Sending hello! 2
+
+TODO
+****
+- Add mcumgr support to this repo, since it is no longer supported in the Golioth
+  Zephyr SDK after v0.1.0. That would allow this sample to stay up to date with the SDK,
+  and not be stuck on v0.1.0.
 
 .. _Networking with QEMU: https://docs.zephyrproject.org/3.0.0/guides/networking/qemu_setup.html#networking-with-qemu
 .. _AT Binary Lists: https://docs.espressif.com/projects/esp-at/en/latest/AT_Binary_Lists/index.html

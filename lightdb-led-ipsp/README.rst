@@ -12,6 +12,23 @@ Requirements
 
 - Golioth credentials
 - Network connectivity
+- Golioth Zephyr SDK v0.1.0
+
+To checkout SDK v0.1.0 for vanilla Zephyr:
+
+```
+cd ~/golioth-zephyr-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
+
+Similarly, to checkout SDK v0.1.0 for NCS Zephyr:
+
+```
+cd ~/golioth-ncs-workspace/modules/lib/golioth
+git checkout v0.1.0
+west update
+```
 
 Building and Running
 ********************
@@ -241,3 +258,9 @@ as:
 - ``/aliases/led1``
 - ``/aliases/led2``
 - ``/aliases/led3``
+
+TODO
+****
+- Add tinycbor support to this repo, since it is no longer supported in the Golioth
+  Zephyr SDK after v0.1.0. That would allow this sample to stay up to date with the SDK,
+  and not be stuck on v0.1.0.
