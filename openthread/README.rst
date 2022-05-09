@@ -62,7 +62,7 @@ Initialize
 
 You will need the Golioth Zephyr SDK and the nRF Connected SDK for this demo.
 
-Follow the instructions in https://github.com/golioth/zephyr-sdk#using-with-nrf-connect-sdk to initialize both.
+Follow the instructions in https://github.com/golioth/golioth-zephyr-sdk#using-with-nrf-connect-sdk to initialize both.
 
 This demo was last tested with nRF Connect SDK version 1.9.1.
 
