@@ -1,0 +1,13 @@
+sample:
+  description: Say Hello to Golioth server via Ethernet
+  name: hello-ethernet
+common:
+  harness: net
+  platform_allow: >
+    adafruit_feather_stm32f405
+    nrf52840dk_nrf52840
+    mimxrt1060_evk
+
+  tags: golioth net socket
+tests:
+  sample.golioth.hello: {}

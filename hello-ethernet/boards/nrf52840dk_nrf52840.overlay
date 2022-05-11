@@ -1,0 +1,22 @@
+/*
+ * Copyright (C) 2021 Golioth, Inc.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+ &spi1 {
+	compatible = "nordic,nrf-spi";
+	status = "okay";
+	sck-pin = <36>;
+	mosi-pin = <38>;
+	miso-pin = <37>;
+	cs-gpios = <&gpio1 3 GPIO_ACTIVE_LOW>;
+	test_spi_w5500: w5500@0 {
+		compatible = "wiznet,w5500";
+		label = "w5500";
+		reg = <0x0>;
+		spi-max-frequency = <10000000>;
+		int-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
+		reset-gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+	};
+};
