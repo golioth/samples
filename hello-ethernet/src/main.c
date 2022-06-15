@@ -9,7 +9,7 @@ LOG_MODULE_REGISTER(golioth_hello, LOG_LEVEL_DBG);
 
 #include <net/coap.h>
 #include <net/golioth/system_client.h>
-#include <net/golioth/wifi.h>
+#include <samples/common/wifi.h>
 
 #if IS_ENABLED(CONFIG_NET_L2_ETHERNET)
 #include <net/net_if.h>
