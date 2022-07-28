@@ -39,7 +39,7 @@ int write_credentials_to_modem(bool id_in_prj, bool psk_in_prj)
     }
     if ((id_in_prj & psk_in_prj) == 0)
     {
-        printk("WARNING: Only one of the two credential types is avaialble to write. I hope you know what you're doing!\n");
+        printk("WARNING: Only one of the two credential types is available to write. I hope you know what you're doing!\n");
     }
     if (id_in_prj)
     {
@@ -126,7 +126,6 @@ void show_prompt(bool in_modem, bool in_prj) {
 int check_credentials(bool *psk_id_in_modem, bool *psk_in_modem, bool *psk_id_in_prj, bool *psk_in_prj)
 {
     int err;
-    uint8_t perm_flags; /* Necessary as arg but not implemented by library */
     static const char FOUND[] = "FOUND";
     static const char ABSENT[] = "ABSENT";
 
@@ -134,7 +133,7 @@ int check_credentials(bool *psk_id_in_modem, bool *psk_in_modem, bool *psk_id_in
     printk("=======================\n");
 
     /* Check for credentials in modem */
-    err = modem_key_mgmt_exists(1, MODEM_KEY_MGMT_CRED_TYPE_IDENTITY, psk_id_in_modem, &perm_flags);
+    err = modem_key_mgmt_exists(1, MODEM_KEY_MGMT_CRED_TYPE_IDENTITY, psk_id_in_modem);
     if (err) {
         printk("Error reading PSK-ID from modem: %d\n", err);
     }
@@ -142,7 +141,7 @@ int check_credentials(bool *psk_id_in_modem, bool *psk_in_modem, bool *psk_id_in
     {
         printk("%10s: PSK-ID with sec_tag=1 stored in modem\n", *psk_id_in_modem ? FOUND : ABSENT);
     }
-    err = modem_key_mgmt_exists(1, MODEM_KEY_MGMT_CRED_TYPE_PSK, psk_in_modem, &perm_flags);
+    err = modem_key_mgmt_exists(1, MODEM_KEY_MGMT_CRED_TYPE_PSK, psk_in_modem);
     if (err) {
         printk("Error reading PSK from modem: %d\n", err);
     }
