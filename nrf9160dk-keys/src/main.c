@@ -16,12 +16,12 @@ uint8_t button_mask;
 
 static void button_handler(uint32_t button_states, uint32_t has_changed)
 {
-	if (has_changed & button_states & BUTTON_1) {
-		button_mask = BUTTON_1;
-	}
+    if (has_changed & button_states & BUTTON_1) {
+        button_mask = BUTTON_1;
+    }
     else if (has_changed & button_states & BUTTON_2) {
-		button_mask = BUTTON_2;
-	}
+        button_mask = BUTTON_2;
+    }
 }
 
 int write_credentials_to_modem(bool id_in_prj, bool psk_in_prj)
@@ -31,13 +31,13 @@ int write_credentials_to_modem(bool id_in_prj, bool psk_in_prj)
     #define AT_BUF_LEN  512
     char at_buf[AT_BUF_LEN] = {0};
 
-    if ((id_in_prj | psk_in_prj) == 0)
+    if ((id_in_prj == false) && (psk_in_prj == false))
     {
         /* This should never happen */
         printk("ERROR: No credentials available to write\n");
         return -EINVAL;
     }
-    if ((id_in_prj & psk_in_prj) == 0)
+    if ((id_in_prj == false) || (psk_in_prj == false))
     {
         printk("WARNING: Only one of the two credential types is available to write. I hope you know what you're doing!\n");
     }
@@ -79,7 +79,7 @@ int delete_credentials_from_modem(bool id_in_modem, bool psk_in_modem)
 {
     int err;
 
-    if ((id_in_modem | psk_in_modem) == 0)
+    if ((id_in_modem == false) && (psk_in_modem == false))
     {
         /* This should never happen */
         printk("ERROR: No credentials available to erase from modem\n");
@@ -106,7 +106,7 @@ int delete_credentials_from_modem(bool id_in_modem, bool psk_in_modem)
 void show_prompt(bool in_modem, bool in_prj) {
     printk("\nManage Modem PSK-ID/PSK Storage:\n");
     printk("================================\n\n");
-    if ((in_modem | in_prj) == 0)
+    if ((in_modem == false) && (in_prj == false))
     {
         printk("No credentials found in modem or in Kconfig (ie: prj.conf\n");
         printk("Nothing to do here!\n\n");
@@ -152,12 +152,18 @@ int check_credentials(bool *psk_id_in_modem, bool *psk_in_modem, bool *psk_id_in
 
     /* Check for credentials in prj.conf */
     #ifdef CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK_ID
-    if (strlen(CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK_ID) > 0) *psk_id_in_prj = 1;
+    if (strlen(CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK_ID) > 0) 
+    {
+        *psk_id_in_prj = 1;
+    }
     #endif
     printk("%10s: Golioth PSK-ID from Kconfig (ie: prj.conf)\n", *psk_id_in_prj ? FOUND : ABSENT);
 
     #ifdef CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK
-    if (strlen(CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK) > 0) *psk_in_prj = 1;
+    if (strlen(CONFIG_GOLIOTH_SYSTEM_CLIENT_PSK) > 0) 
+    {
+        *psk_in_prj = 1;
+    }
     #endif
     printk("%10s: Golioth PSK from Kconfig (ie: prj.conf)\n", *psk_in_prj ? FOUND : ABSENT);
 
@@ -177,7 +183,7 @@ void main(void)
     button_mask = 0;
     dk_buttons_init(button_handler);
 
-    show_prompt((psk_id_in_modem | psk_in_modem), (psk_id_in_prj | psk_in_prj));
+    show_prompt((psk_id_in_modem || psk_in_modem), (psk_id_in_prj || psk_in_prj));
 
     while(1)
     {
@@ -192,7 +198,7 @@ void main(void)
             }
             k_sleep(K_SECONDS(2));  /* Some timeout to signal to user that something important happened */
             check_credentials(&psk_id_in_modem, &psk_in_modem, &psk_id_in_prj, &psk_in_prj);
-            show_prompt((psk_id_in_modem | psk_in_modem), (psk_id_in_prj | psk_in_prj));
+            show_prompt((psk_id_in_modem || psk_in_modem), (psk_id_in_prj || psk_in_prj));
             button_mask = 0;
         }
         else
